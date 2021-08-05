@@ -1,8 +1,8 @@
 package com.example.memessharing.deps
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import com.example.memessharing.MemesContract
 import com.example.memessharing.databinding.ActivityMainBinding
 import com.example.memessharing.view.MainActivity
@@ -24,6 +24,7 @@ import kotlinx.coroutines.plus
 abstract class MainModule {
 
     companion object {
+
         @Provides
         @ActivityScoped
         fun providesMainActivityBinding(@ActivityContext context: Context): ActivityMainBinding {
@@ -41,9 +42,16 @@ abstract class MainModule {
         fun providesSimpleExoPlayer(@ActivityContext context: Context): SimpleExoPlayer {
             return SimpleExoPlayer.Builder(context).build()
         }
+
+        @Provides
+        @ActivityScoped
+        @ActivityContext
+        fun provideMainActivity(activity: Activity): MainActivity {
+            return activity as MainActivity
+        }
     }
 
     @Binds
     @ActivityScoped
-    abstract fun providesView(@ActivityContext memeView: MainActivity): MemesContract.MemeView
+    abstract fun providesView(@ActivityContext activity: MainActivity): MemesContract.MemeView
 }
