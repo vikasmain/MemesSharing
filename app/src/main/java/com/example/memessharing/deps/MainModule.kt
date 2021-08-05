@@ -1,5 +1,6 @@
 package com.example.memessharing.deps
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,13 @@ abstract class MainModule {
         @ActivityScoped
         fun providesSimpleExoPlayer(@ActivityContext context: Context): SimpleExoPlayer {
             return SimpleExoPlayer.Builder(context).build()
+        }
+
+        @Provides
+        @ActivityScoped
+        @ActivityContext
+        fun provideMainActivity(activity: Activity): MainActivity {
+            return activity as MainActivity
         }
     }
 
