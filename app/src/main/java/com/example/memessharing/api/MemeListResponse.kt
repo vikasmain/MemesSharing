@@ -3,7 +3,7 @@ package com.example.memessharing.api
 import com.google.gson.annotations.SerializedName
 
 data class MemeListResponse(
-    @SerializedName("data") val data: MemesData
+    @SerializedName("data") val data: List<MemesData>
 ) {
     data class MemesData(
         @SerializedName("title") val title: String,

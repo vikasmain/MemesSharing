@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-const val BASE_URL = "https://restcountries.eu/rest/v2/"
+const val BASE_URL = "https://memestik.herokuapp.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)

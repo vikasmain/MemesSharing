@@ -8,6 +8,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4010416666666667" />
         <entry key="app/src/main/res/layout/home_view.xml" value="0.4010416666666667" />
         <entry key="app/src/main/res/layout/home_view_pager_adapter.xml" value="0.4010416666666667" />
+        <entry key="app/src/main/res/layout/home_view_pager_item.xml" value="0.4010416666666667" />
+        <entry key="app/src/main/res/layout/list_view.xml" value="0.4010416666666667" />
         <entry key="app/src/main/res/layout/memes_list_item.xml" value="0.4010416666666667" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.31851851851851853" />
       </map>
