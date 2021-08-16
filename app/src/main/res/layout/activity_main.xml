@@ -11,20 +11,23 @@
         layout="@layout/home_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation" />
 
     <include
         android:id="@+id/listView"
-        android:visibility="gone"
         layout="@layout/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"
+        app:itemIconTint="@drawable/bottom_navigation_item_color"
+        app:itemTextColor="@drawable/bottom_navigation_item_color"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation" />

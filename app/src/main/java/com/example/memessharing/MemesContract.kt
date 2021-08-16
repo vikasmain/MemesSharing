@@ -6,6 +6,8 @@ interface MemesContract {
     interface MemeView {
         fun showListView()
         fun showHomeView(memeListResponse: MemeListResponse)
+        fun showProgressBar()
+        fun hideProgressBar()
     }
 
     interface Presenter {

@@ -2,7 +2,6 @@ package com.example.memessharing.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.example.memessharing.MemesContract
@@ -10,9 +9,12 @@ import com.example.memessharing.R
 import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.databinding.ActivityMainBinding
 import com.example.memessharing.presenter.MemesPresenter
-import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.view.WindowManager
+import android.os.Build
+import android.view.Window
+import com.example.memessharing.helper.DownloadVideoHelper
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MemesContract.MemeView {
@@ -24,12 +26,22 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     lateinit var memesPresenter: MemesPresenter
 
     @Inject
-    lateinit var simpleExoPlayer: SimpleExoPlayer
+    lateinit var downloadVideHelper: DownloadVideoHelper
+
+    @Inject
+    lateinit var videoViewPagerAdapter: VideoViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        memesPresenter.showHomePage()
+        memesPresenter.attach()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val w: Window = window
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.page1 -> {
@@ -39,7 +51,6 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
                     true
                 }
                 R.id.page2 -> {
-                    simpleExoPlayer.stop()
                     binding.homeView.homeView.visibility = View.GONE
                     binding.listView.listView.visibility = View.VISIBLE
                     memesPresenter.handleMemeApi()
@@ -57,10 +68,9 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
 
     override fun showHomeView(memeListResponse: MemeListResponse) {
         val viewPager = binding.homeView.viewPager
-        val viewPagerAdapter =
-            VideoViewPagerAdapter(this, simpleExoPlayer)
-        viewPager.adapter = viewPagerAdapter
-        viewPagerAdapter.updateData(memeListResponse.data)
+
+        viewPager.adapter = videoViewPagerAdapter
+        videoViewPagerAdapter.updateData(memeListResponse.data)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
@@ -72,25 +82,43 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
                 positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-
             }
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                simpleExoPlayer.playWhenReady = true
-                viewPagerAdapter.updateData(memeListResponse.data)
-                simpleExoPlayer.stop()
+                videoViewPagerAdapter.updateData(memeListResponse.data)
             }
         })
     }
 
-    override fun onStop() {
-        super.onStop()
-        simpleExoPlayer.playWhenReady = false
-        simpleExoPlayer.stop()
-        simpleExoPlayer.release()
+    override fun onStart() {
+        super.onStart()
+        memesPresenter.showHomePage()
+        // you can see the benefit of putting this method here when you will come to app after sharing video on another app
     }
+
+    override fun onStop() {
+        binding.homeView.viewPager.adapter = null
+        super.onStop()
+    }
+
     override fun onDestroy() {
+        videoViewPagerAdapter.releaseMediaPlayer()
         super.onDestroy()
+    }
+
+    override fun showProgressBar() {
+        with(binding.homeView) {
+            videoDownloadProgressBar.visibility = View.VISIBLE
+            videoDownloadTextView.visibility = View.VISIBLE
+        }
+        videoViewPagerAdapter.pauseMediaPlayer()
+    }
+
+    override fun hideProgressBar() {
+        with(binding.homeView) {
+            videoDownloadProgressBar.visibility = View.GONE
+            videoDownloadTextView.visibility = View.GONE
+        }
     }
 }
