@@ -2,7 +2,10 @@ package com.example.memessharing.presenter
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import com.example.memessharing.MemesContract
+import com.example.memessharing.StateFlows
+import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.model.MemesModel
 import com.example.memessharing.helper.DownloadVideoHelper
 import com.example.memessharing.helper.ShareVideoHelper
@@ -27,6 +30,7 @@ class MemesPresenter @Inject constructor(
 
     internal fun attach() {
         observeVideoShareState()
+        observeListViewItemState()
     }
 
     override fun handleMemeApi() {
@@ -34,7 +38,7 @@ class MemesPresenter @Inject constructor(
             .onStart {
             }
             .onEach {
-                view.showListView()
+                view.showListView(it.data)
             }
             .onCompletion {
 
@@ -45,14 +49,32 @@ class MemesPresenter @Inject constructor(
     }
 
     override fun showHomePage() {
-        memesModel.getMemesList()
+        memesModel.getMemeVideosList()
             .onStart {
+                view.showLoadingView()
             }
             .onEach {
                 view.showHomeView(it)
             }
             .onCompletion {
+                view.hideLoadingView()
+            }
+            .catch {
+                throw  it
+            }.launchIn(scope = scope)
+    }
 
+    private fun showFilteredVideoList(memeListResponse: List<MemeListResponse.MemesData>) {
+        memesModel.getMemeVideosList()
+            .onStart {
+                view.hideListView()
+                view.showLoadingView()
+            }
+            .onEach {
+                view.showFilteredVideoViewPager(memeListResponse, it.data)
+            }
+            .onCompletion {
+                view.hideLoadingView()
             }
             .catch {
                 throw  it
@@ -64,6 +86,17 @@ class MemesPresenter @Inject constructor(
             if (it != null) {
                 view.hideProgressBar()
                 shareVideoHelper.shareDownloadedVideo(Uri.parse(it))
+            }
+        }.catch {
+            Log.e("MainActivity", "error observing Share state flow", it)
+            throw it
+        }.launchIn(scope)
+    }
+
+    private fun observeListViewItemState() {
+        StateFlows.clickListenerStateFlow.asStateFlow().onEach {
+            if (it != null) {
+                showFilteredVideoList(it.second)
             }
         }.catch {
             Log.e("MainActivity", "error observing Share state flow", it)

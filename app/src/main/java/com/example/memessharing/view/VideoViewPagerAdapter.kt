@@ -9,11 +9,14 @@ import android.view.ViewGroup
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memessharing.R
-import com.example.memessharing.api.MemeListResponse
+import com.example.memessharing.api.MemeVideosListResponse
 import androidx.appcompat.content.res.AppCompatResources
+import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.databinding.HomeViewPagerItemBinding
 import com.example.memessharing.helper.DownloadVideoHelper
+import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.ServiceScoped
 import javax.inject.Inject
 
 @ActivityScoped
@@ -22,11 +25,33 @@ class VideoViewPagerAdapter @Inject constructor(
     private val downloadVideoHelper: DownloadVideoHelper
 ) :
     RecyclerView.Adapter<VideoViewPagerHolder>() {
-    private val videosList = mutableListOf<MemeListResponse.MemesData>()
+    private val videosList = mutableListOf<MemeVideosListResponse.MemesData>()
     private var videoViewHolder: VideoViewPagerHolder? = null
-    internal fun updateData(memeListResponse: List<MemeListResponse.MemesData>) {
+    internal fun updateData(memeListResponse: List<MemeVideosListResponse.MemesData>) {
         videosList.clear()
         videosList.addAll(memeListResponse)
+        notifyDataSetChanged()
+    }
+
+    internal fun filterMemeData(
+        memeListData: List<MemeListResponse.MemesData>,
+        memesData: List<MemeVideosListResponse.MemesData>
+    ) {
+        videosList.clear()
+        memeListData.forEach {
+            val memeVideoData = memesData.find { it.subTitle == it.subTitle }
+            if (it.subTitle == memeVideoData?.subTitle) {
+                videosList.add(
+                    MemeVideosListResponse.MemesData(
+                        title = memeVideoData.title,
+                        subTitle = memeVideoData.subTitle,
+                        description = memeVideoData.description,
+                        imageUrl = memeVideoData.imageUrl,
+                        videoUrl = memeVideoData.videoUrl
+                    )
+                )
+            }
+        }
         notifyDataSetChanged()
     }
 
@@ -67,7 +92,7 @@ class VideoViewPagerHolder(
     internal var mediaPlayer: MediaPlayer? = null
 
     fun bindData(
-        memesData: MemeListResponse.MemesData
+        memesData: MemeVideosListResponse.MemesData
     ) {
         with(binding) {
             progressBar.visibility = View.VISIBLE
@@ -85,7 +110,7 @@ class VideoViewPagerHolder(
     }
 
     private fun HomeViewPagerItemBinding.showVideoView(
-        memesData: MemeListResponse.MemesData,
+        memesData: MemeVideosListResponse.MemesData,
         videoView: VideoView
     ) {
         val uri: Uri = Uri.parse(memesData.videoUrl)
@@ -106,7 +131,7 @@ class VideoViewPagerHolder(
     }
 
     private fun HomeViewPagerItemBinding.handleShareButtonClick(
-        memesData: MemeListResponse.MemesData
+        memesData: MemeVideosListResponse.MemesData
     ) {
         shareButton.setOnClickListener {
             downloadVideoHelper.handleVideoDownload(memesData.videoUrl, memesData.title)

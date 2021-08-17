@@ -3,4 +3,6 @@
     <string name="item_1">Home</string>
     <string name="item_2">List</string>
     <string name="downloading_video">Downloading Video</string>
+    <string name="share">Share</string>
+    <string name="like">Like</string>
 </resources>

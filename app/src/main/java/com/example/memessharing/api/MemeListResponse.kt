@@ -8,8 +8,7 @@ data class MemeListResponse(
     data class MemesData(
         @SerializedName("title") val title: String,
         @SerializedName("description") val description: String,
-        @SerializedName("subtitle") val subTitle: String,
-        @SerializedName("imageurl") val imageUrl: String,
-        @SerializedName("videourl") val videoUrl: String
+        @SerializedName("subtitle") val subTitle: SubTitle,
+        @SerializedName("imageurl") val imageUrl: String
     )
 }

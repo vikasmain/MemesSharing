@@ -6,7 +6,7 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.example.memessharing.MemesContract
 import com.example.memessharing.R
-import com.example.memessharing.api.MemeListResponse
+import com.example.memessharing.api.MemeVideosListResponse
 import com.example.memessharing.databinding.ActivityMainBinding
 import com.example.memessharing.presenter.MemesPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +14,8 @@ import javax.inject.Inject
 import android.view.WindowManager
 import android.os.Build
 import android.view.Window
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.helper.DownloadVideoHelper
 
 @AndroidEntryPoint
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
 
     @Inject
     lateinit var videoViewPagerAdapter: VideoViewPagerAdapter
+
+    @Inject
+    lateinit var memeListViewAdapter: MemeListViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,12 +68,24 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
         }
     }
 
-    override fun showListView() {
+    override fun showListView(memesData: List<MemeListResponse.MemesData>) {
+        binding.listView.recyclerView.visibility = View.VISIBLE
+        binding.listView.recyclerView.adapter = memeListViewAdapter
+        binding.listView.recyclerView.layoutManager = GridLayoutManager(this, 2)
+        memeListViewAdapter.updateList(memesData)
     }
 
-    override fun showHomeView(memeListResponse: MemeListResponse) {
-        val viewPager = binding.homeView.viewPager
+    override fun showLoadingView() {
+        binding.homeView.progressBar.visibility = View.VISIBLE
+    }
 
+    override fun hideLoadingView() {
+        binding.homeView.progressBar.visibility = View.GONE
+        binding.listView.progressBar.visibility = View.GONE
+    }
+
+    override fun showHomeView(memeListResponse: MemeVideosListResponse) {
+        val viewPager = binding.homeView.viewPager
         viewPager.adapter = videoViewPagerAdapter
         videoViewPagerAdapter.updateData(memeListResponse.data)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -89,6 +106,40 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
                 videoViewPagerAdapter.updateData(memeListResponse.data)
             }
         })
+    }
+
+    override fun showFilteredVideoViewPager(
+        memeListData: List<MemeListResponse.MemesData>,
+        memesData: List<MemeVideosListResponse.MemesData>
+    ) {
+        hideListView()
+        binding.listView.listViewPager2.visibility = View.VISIBLE
+        binding.listView.listViewPager2.adapter = videoViewPagerAdapter
+        videoViewPagerAdapter.filterMemeData(memeListData, memesData)
+        binding.listView.listViewPager2.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                videoViewPagerAdapter.filterMemeData(memeListData, memesData)
+            }
+        })
+    }
+
+    override fun hideListView() {
+        binding.listView.recyclerView.visibility = View.GONE
+        binding.listView.progressBar.visibility = View.VISIBLE
     }
 
     override fun onStart() {
