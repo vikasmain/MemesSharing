@@ -149,8 +149,8 @@ class VideoViewPagerHolder(
     }
 
     internal fun playMediaPlayer() {
-        with(binding) {
-            playPauseButton.setImageDrawable(
+        with(binding.playPauseButton) {
+            setImageDrawable(
                 AppCompatResources.getDrawable(
                     activity,
                     R.drawable.pause_button
@@ -158,7 +158,7 @@ class VideoViewPagerHolder(
             )
             itemView.postDelayed(
                 {
-                    playPauseButton.visibility = View.GONE
+                    visibility = View.GONE
                 },
                 2000
             )
@@ -167,16 +167,16 @@ class VideoViewPagerHolder(
     }
 
     internal fun pauseMediaPlayer() {
-        with(binding) {
-            playPauseButton.setImageDrawable(
+        with(binding.playPauseButton) {
+            setImageDrawable(
                 AppCompatResources.getDrawable(
                     activity,
                     R.drawable.play_button
                 )
             )
             val animation = AnimationUtils.loadAnimation(activity, R.anim.bounce_animation)
-            playPauseButton.startAnimation(animation)
-            playPauseButton.visibility = View.VISIBLE
+            startAnimation(animation)
+            visibility = View.VISIBLE
             mediaPlayer?.pause()
         }
     }

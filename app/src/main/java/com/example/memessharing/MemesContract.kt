@@ -14,13 +14,15 @@ interface MemesContract {
         fun hideListView()
         fun showLoadingView()
         fun hideLoadingView()
+        fun showErrorView()
+        fun showEmptyListView()
         fun showHomeView(memeListResponse: MemeVideosListResponse)
         fun showProgressBar()
         fun hideProgressBar()
     }
 
     interface Presenter {
-        fun handleMemeApi()
-        fun showHomePage()
+        fun callMemeListApi()
+        fun callMemeVideoApi()
     }
 }

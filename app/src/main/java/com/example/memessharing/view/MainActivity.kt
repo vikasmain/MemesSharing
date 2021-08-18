@@ -50,15 +50,19 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.page1 -> {
-                    binding.homeView.homeView.visibility = View.VISIBLE
-                    binding.listView.listView.visibility = View.GONE
-                    memesPresenter.showHomePage()
+                    with(binding) {
+                        homeView.homeView.visibility = View.VISIBLE
+                        listView.listView.visibility = View.GONE
+                        memesPresenter.callMemeVideoApi()
+                    }
                     true
                 }
                 R.id.page2 -> {
-                    binding.homeView.homeView.visibility = View.GONE
-                    binding.listView.listView.visibility = View.VISIBLE
-                    memesPresenter.handleMemeApi()
+                    with(binding) {
+                        homeView.homeView.visibility = View.GONE
+                        listView.listView.visibility = View.VISIBLE
+                        memesPresenter.callMemeListApi()
+                    }
                     true
                 }
                 else -> {
@@ -69,10 +73,12 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     }
 
     override fun showListView(memesData: List<MemeListResponse.MemesData>) {
-        binding.listView.recyclerView.visibility = View.VISIBLE
-        binding.listView.recyclerView.adapter = memeListViewAdapter
-        binding.listView.recyclerView.layoutManager = GridLayoutManager(this, 2)
-        memeListViewAdapter.updateList(memesData)
+        with(binding.listView.recyclerView) {
+            visibility = View.VISIBLE
+            adapter = memeListViewAdapter
+            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            memeListViewAdapter.updateList(memesData)
+        }
     }
 
     override fun showLoadingView() {
@@ -80,8 +86,18 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     }
 
     override fun hideLoadingView() {
-        binding.homeView.progressBar.visibility = View.GONE
-        binding.listView.progressBar.visibility = View.GONE
+        with(binding) {
+            homeView.progressBar.visibility = View.GONE
+            listView.progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun showErrorView() {
+
+    }
+
+    override fun showEmptyListView() {
+
     }
 
     override fun showHomeView(memeListResponse: MemeVideosListResponse) {
@@ -138,13 +154,15 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     }
 
     override fun hideListView() {
-        binding.listView.recyclerView.visibility = View.GONE
-        binding.listView.progressBar.visibility = View.VISIBLE
+        with(binding.listView) {
+            recyclerView.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        memesPresenter.showHomePage()
+        memesPresenter.callMemeVideoApi()
         // you can see the benefit of putting this method here when you will come to app after sharing video on another app
     }
 

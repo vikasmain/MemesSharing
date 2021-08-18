@@ -2,7 +2,6 @@ package com.example.memessharing.presenter
 
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.example.memessharing.MemesContract
 import com.example.memessharing.StateFlows
 import com.example.memessharing.api.MemeListResponse
@@ -30,41 +29,43 @@ class MemesPresenter @Inject constructor(
 
     internal fun attach() {
         observeVideoShareState()
-        observeListViewItemState()
+        observeListViewItemClickState()
     }
 
-    override fun handleMemeApi() {
+    override fun callMemeListApi() {
         memesModel.getMemesList()
             .onStart {
             }
             .onEach {
                 view.showListView(it.data)
             }
-            .onCompletion {
-
-            }
             .catch {
-
+                throw it
             }.launchIn(scope = scope)
     }
 
-    override fun showHomePage() {
+    override fun callMemeVideoApi() {
         memesModel.getMemeVideosList()
             .onStart {
                 view.showLoadingView()
             }
             .onEach {
-                view.showHomeView(it)
+                if (it.data.isEmpty()) {
+                    view.showEmptyListView()
+                } else {
+                    view.showHomeView(it)
+                }
             }
             .onCompletion {
                 view.hideLoadingView()
             }
             .catch {
+                view.showErrorView()
                 throw  it
             }.launchIn(scope = scope)
     }
 
-    private fun showFilteredVideoList(memeListResponse: List<MemeListResponse.MemesData>) {
+    internal fun showFilteredVideoList(memeListResponse: List<MemeListResponse.MemesData>) {
         memesModel.getMemeVideosList()
             .onStart {
                 view.hideListView()
@@ -81,7 +82,7 @@ class MemesPresenter @Inject constructor(
             }.launchIn(scope = scope)
     }
 
-    private fun observeVideoShareState() {
+    internal fun observeVideoShareState() {
         downloadVideoHelper.videoDownloadStateFlow.asStateFlow().onEach {
             if (it != null) {
                 view.hideProgressBar()
@@ -94,7 +95,7 @@ class MemesPresenter @Inject constructor(
         }.launchIn(scope)
     }
 
-    private fun observeListViewItemState() {
+    private fun observeListViewItemClickState() {
         StateFlows.clickListenerStateFlow.asStateFlow().onEach {
             if (it != null) {
                 showFilteredVideoList(it.second)
