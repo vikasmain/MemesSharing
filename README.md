@@ -6,6 +6,8 @@ An Online Meme Sharing app with swipeable vidoes, user can like, share different
 
 https://user-images.githubusercontent.com/20916492/129900460-ff3fb60f-4c57-4b8a-97f0-d9d7577660a7.mp4
 
+<a href="https://github.com/vikasmain/MemesSharing/blob/master/meme.apk"><b>APK</b></a>
+
 1. User can see videos in viewpager by swiping up.
 2. User can like, share the video after clicking on like, share icon.
 3. User can play/pause the video after clicking on videoview.
