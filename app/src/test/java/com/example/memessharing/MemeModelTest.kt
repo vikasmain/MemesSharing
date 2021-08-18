@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.powermock.api.mockito.PowerMockito
 import org.powermock.modules.junit4.PowerMockRunner
 import java.lang.NullPointerException
 
