@@ -163,7 +163,6 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
             videoDownloadProgressBar.visibility = View.VISIBLE
             videoDownloadTextView.visibility = View.VISIBLE
         }
-        videoViewPagerAdapter.pauseMediaPlayer()
     }
 
     override fun hideProgressBar() {

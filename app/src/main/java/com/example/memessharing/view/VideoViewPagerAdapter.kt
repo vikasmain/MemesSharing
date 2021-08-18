@@ -6,6 +6,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memessharing.R
@@ -105,7 +106,15 @@ class VideoViewPagerHolder(
                     playMediaPlayer()
                 }
             }
+            handleLikeButtonClick()
             handleShareButtonClick(memesData)
+        }
+    }
+
+    private fun HomeViewPagerItemBinding.handleLikeButtonClick() {
+        likeButton.setOnClickListener {
+            val animation = AnimationUtils.loadAnimation(activity, R.anim.bounce_animation)
+            likeButton.startAnimation(animation)
         }
     }
 
@@ -134,6 +143,7 @@ class VideoViewPagerHolder(
         memesData: MemeVideosListResponse.MemesData
     ) {
         shareButton.setOnClickListener {
+            mediaPlayer?.pause()
             downloadVideoHelper.handleVideoDownload(memesData.videoUrl, memesData.title)
         }
     }
@@ -147,8 +157,10 @@ class VideoViewPagerHolder(
                 )
             )
             itemView.postDelayed(
-                { playPauseButton.visibility = View.GONE },
-                3000
+                {
+                    playPauseButton.visibility = View.GONE
+                },
+                2000
             )
             mediaPlayer?.start()
         }
@@ -162,6 +174,8 @@ class VideoViewPagerHolder(
                     R.drawable.play_button
                 )
             )
+            val animation = AnimationUtils.loadAnimation(activity, R.anim.bounce_animation)
+            playPauseButton.startAnimation(animation)
             playPauseButton.visibility = View.VISIBLE
             mediaPlayer?.pause()
         }
