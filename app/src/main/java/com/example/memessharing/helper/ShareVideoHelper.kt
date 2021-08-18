@@ -1,7 +1,7 @@
 package com.example.memessharing.helper
 
-import android.app.Activity
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
@@ -10,9 +10,9 @@ import java.io.File
 import javax.inject.Inject
 
 @ActivityScoped
-class ShareVideoHelper @Inject constructor(private val activity: Activity) {
+class ShareVideoHelper @Inject constructor() {
 
-    internal fun shareDownloadedVideo(downloadedVideoUri: Uri) {
+    internal fun shareDownloadedVideo(context: Context, downloadedVideoUri: Uri) {
         if (ContentResolver.SCHEME_FILE == downloadedVideoUri.scheme) {
             val file = downloadedVideoUri.path?.let {
                 File(it)
@@ -26,13 +26,13 @@ class ShareVideoHelper @Inject constructor(private val activity: Activity) {
                     )
                     putExtra(
                         Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                            activity, activity.applicationContext.packageName + ".provider",
+                            context, context.applicationContext.packageName + ".provider",
                             file
                         )
                     )
                     flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 }
-                activity.startActivity(
+                context.startActivity(
                     Intent.createChooser(
                         intent,
                         "Share this Video"

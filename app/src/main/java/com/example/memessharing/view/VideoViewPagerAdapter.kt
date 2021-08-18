@@ -1,6 +1,6 @@
 package com.example.memessharing.view
 
-import android.app.Activity
+import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.view.LayoutInflater
@@ -15,19 +15,16 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.databinding.HomeViewPagerItemBinding
 import com.example.memessharing.helper.DownloadVideoHelper
-import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.scopes.ActivityScoped
-import dagger.hilt.android.scopes.ServiceScoped
 import javax.inject.Inject
 
 @ActivityScoped
-class VideoViewPagerAdapter @Inject constructor(
-    private val activity: Activity,
+class VideoViewPagerAdapter(
+    private val context: Context,
     private val downloadVideoHelper: DownloadVideoHelper
 ) :
     RecyclerView.Adapter<VideoViewPagerHolder>() {
     private val videosList = mutableListOf<MemeVideosListResponse.MemesData>()
-    private var videoViewHolder: VideoViewPagerHolder? = null
     internal fun updateData(memeListResponse: List<MemeVideosListResponse.MemesData>) {
         videosList.clear()
         videosList.addAll(memeListResponse)
@@ -58,9 +55,8 @@ class VideoViewPagerAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewPagerHolder {
         val binding =
-            HomeViewPagerItemBinding.inflate(LayoutInflater.from(activity), parent, false)
-        videoViewHolder = VideoViewPagerHolder(binding, activity, downloadVideoHelper)
-        return VideoViewPagerHolder(binding, activity, downloadVideoHelper)
+            HomeViewPagerItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        return VideoViewPagerHolder(binding, context, downloadVideoHelper)
     }
 
     override fun onBindViewHolder(holder: VideoViewPagerHolder, position: Int) {
@@ -70,24 +66,11 @@ class VideoViewPagerAdapter @Inject constructor(
     override fun getItemCount(): Int {
         return videosList.size
     }
-
-    internal fun pauseMediaPlayer() {
-        videoViewHolder?.pauseMediaPlayer()
-    }
-
-    internal fun releaseMediaPlayer() {
-        videoViewHolder?.mediaPlayer?.release()
-        videoViewHolder?.mediaPlayer?.stop()
-    }
-
-    internal fun startMediaPlayer() {
-        videoViewHolder?.playMediaPlayer()
-    }
 }
 
 class VideoViewPagerHolder(
     private val binding: HomeViewPagerItemBinding,
-    private val activity: Activity,
+    private val context: Context,
     private val downloadVideoHelper: DownloadVideoHelper
 ) : RecyclerView.ViewHolder(binding.root) {
     internal var mediaPlayer: MediaPlayer? = null
@@ -107,13 +90,13 @@ class VideoViewPagerHolder(
                 }
             }
             handleLikeButtonClick()
-            handleShareButtonClick(memesData)
+            handleShareButtonClick(context, memesData)
         }
     }
 
     private fun HomeViewPagerItemBinding.handleLikeButtonClick() {
         likeButton.setOnClickListener {
-            val animation = AnimationUtils.loadAnimation(activity, R.anim.bounce_animation)
+            val animation = AnimationUtils.loadAnimation(context, R.anim.bounce_animation)
             likeButton.startAnimation(animation)
         }
     }
@@ -140,11 +123,12 @@ class VideoViewPagerHolder(
     }
 
     private fun HomeViewPagerItemBinding.handleShareButtonClick(
+        context: Context,
         memesData: MemeVideosListResponse.MemesData
     ) {
         shareButton.setOnClickListener {
             mediaPlayer?.pause()
-            downloadVideoHelper.handleVideoDownload(memesData.videoUrl, memesData.title)
+            downloadVideoHelper.handleVideoDownload(context, memesData.videoUrl, memesData.title)
         }
     }
 
@@ -152,7 +136,7 @@ class VideoViewPagerHolder(
         with(binding.playPauseButton) {
             setImageDrawable(
                 AppCompatResources.getDrawable(
-                    activity,
+                    context,
                     R.drawable.pause_button
                 )
             )
@@ -170,11 +154,11 @@ class VideoViewPagerHolder(
         with(binding.playPauseButton) {
             setImageDrawable(
                 AppCompatResources.getDrawable(
-                    activity,
+                    context,
                     R.drawable.play_button
                 )
             )
-            val animation = AnimationUtils.loadAnimation(activity, R.anim.bounce_animation)
+            val animation = AnimationUtils.loadAnimation(context, R.anim.bounce_animation)
             startAnimation(animation)
             visibility = View.VISIBLE
             mediaPlayer?.pause()

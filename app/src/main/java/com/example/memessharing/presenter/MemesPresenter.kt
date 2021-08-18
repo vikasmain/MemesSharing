@@ -86,7 +86,7 @@ class MemesPresenter @Inject constructor(
         downloadVideoHelper.videoDownloadStateFlow.asStateFlow().onEach {
             if (it != null) {
                 view.hideProgressBar()
-                shareVideoHelper.shareDownloadedVideo(Uri.parse(it))
+                shareVideoHelper.shareDownloadedVideo(it.first, Uri.parse(it.second))
             }
         }.catch {
             view.hideProgressBar()

@@ -1,6 +1,5 @@
 package com.example.memessharing.helper
 
-import android.app.Activity
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
@@ -18,19 +17,18 @@ import javax.inject.Inject
 
 @ActivityScoped
 class DownloadVideoHelper @Inject constructor(
-    private val activity: Activity,
     private val memeView: MemeView
 ) {
-    internal val videoDownloadStateFlow = MutableStateFlow<String?>(null)
+    internal val videoDownloadStateFlow = MutableStateFlow<Pair<Context, String?>?>(null)
 
-    fun handleVideoDownload(videoUrl: String, videoTitle: String) {
+    internal fun handleVideoDownload(context: Context, videoUrl: String, videoTitle: String) {
         memeView.showProgressBar()
-        activity.registerReceiver(
+        context.registerReceiver(
             videoDownloadReceiver(), IntentFilter(
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE
             )
         )
-        val downloadManager = activity.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         val request = DownloadManager.Request(Uri.parse(videoUrl))
         request.apply {
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
@@ -68,7 +66,7 @@ class DownloadVideoHelper @Inject constructor(
                 cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
             when (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
                 DownloadManager.STATUS_SUCCESSFUL -> {
-                    videoDownloadStateFlow.value = downloadedLocalUri
+                    videoDownloadStateFlow.value = Pair(context, downloadedLocalUri)
                 }
                 DownloadManager.STATUS_FAILED -> {
                     videoDownloadStateFlow.value = null

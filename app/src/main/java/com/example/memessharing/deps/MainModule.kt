@@ -45,5 +45,5 @@ abstract class MainModule {
 
     @Binds
     @ActivityScoped
-    abstract fun providesView(@ActivityContext memeView: MainActivity): MemesContract.MemeView
+    abstract fun providesView(@ActivityContext mainActivity: MainActivity): MemesContract.MemeView
 }

@@ -31,9 +31,6 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     lateinit var downloadVideHelper: DownloadVideoHelper
 
     @Inject
-    lateinit var videoViewPagerAdapter: VideoViewPagerAdapter
-
-    @Inject
     lateinit var memeListViewAdapter: MemeListViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,6 +99,7 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
 
     override fun showHomeView(memeListResponse: MemeVideosListResponse) {
         val viewPager = binding.homeView.viewPager
+        val videoViewPagerAdapter = VideoViewPagerAdapter(this, downloadVideHelper)
         viewPager.adapter = videoViewPagerAdapter
         videoViewPagerAdapter.updateData(memeListResponse.data)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -130,6 +128,7 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     ) {
         hideListView()
         binding.listView.listViewPager2.visibility = View.VISIBLE
+        val videoViewPagerAdapter = VideoViewPagerAdapter(this, downloadVideHelper)
         binding.listView.listViewPager2.adapter = videoViewPagerAdapter
         videoViewPagerAdapter.filterMemeData(memeListData, memesData)
         binding.listView.listViewPager2.registerOnPageChangeCallback(object :
@@ -172,7 +171,6 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
     }
 
     override fun onDestroy() {
-        videoViewPagerAdapter.releaseMediaPlayer()
         super.onDestroy()
     }
 
