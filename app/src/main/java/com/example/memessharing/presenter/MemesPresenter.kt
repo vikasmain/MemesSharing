@@ -88,6 +88,7 @@ class MemesPresenter @Inject constructor(
                 shareVideoHelper.shareDownloadedVideo(Uri.parse(it))
             }
         }.catch {
+            view.hideProgressBar()
             Log.e("MainActivity", "error observing Share state flow", it)
             throw it
         }.launchIn(scope)
