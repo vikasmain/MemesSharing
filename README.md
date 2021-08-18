@@ -6,7 +6,7 @@ An Online Meme Sharing app with swipeable vidoes, user can like, share different
 
 https://user-images.githubusercontent.com/20916492/129900460-ff3fb60f-4c57-4b8a-97f0-d9d7577660a7.mp4
 
-1. User can see videos in viewpager by swiping.
+1. User can see videos in viewpager by swiping up.
 2. User can like, share the video after clicking on like, share icon.
 3. User can play/pause the video after clicking on videoview.
 4. User can see filtered listview of videos in gridview.
@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/20916492/129900460-ff3fb60f-4c57-4b8a-
 
 https://user-images.githubusercontent.com/20916492/129901403-2a94001a-5e1f-47f7-9f77-7168eac88e73.mp4
 
-Video will be available to share after downloading.
+Video will be available to share after downloading. During downloading video videoview will be paused and user will see a chooser for sharing video.
 
 
 <h2>Screenshots of app:-</h2>
@@ -48,7 +48,7 @@ You can add data to this api using post request using postman like below.
 
 1. Used MVP architecture here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/MemesContract.kt
 
-2. Used coroutines for api calls here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/presenter/MemesPresenter.kt
+2. Used coroutines for api calls here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/presenter/MemesPresenter.kt#L68
  
 3. Used Dagger hilt for dependency injection here:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/main/java/com/example/memessharing/deps
  
