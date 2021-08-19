@@ -48,8 +48,9 @@ You can add data to this api using post request using postman like below.
 
 <h2>CodeFlow of App</h2> 
 
-There are two branches of app:-
-a) Master branch contain this code
+<h2>There are two branches of app:-</h2>
+
+<b>a) Master branch contain this code</b>
 
 1. Used MVP architecture here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/MemesContract.kt
 
@@ -61,7 +62,7 @@ a) Master branch contain this code
  
 5. Added tests for coroutines:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/test/java/com/example/memessharing
 
-b) <a href="https://github.com/vikasmain/MemesSharing/tree/feature/view-impl"><b>feature/view-impl</b></a> branch contains this code
+b) <b><a href="https://github.com/vikasmain/MemesSharing/tree/feature/view-impl"><b>feature/view-impl</b></a> branch contains this code</b>
 
 1. Removed activity reference from dagger hilt module:- https://github.com/vikasmain/MemesSharing/blob/feature/view-impl/app/src/main/java/com/example/memessharing/deps/MainModule.kt
 
