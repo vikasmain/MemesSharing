@@ -48,6 +48,9 @@ You can add data to this api using post request using postman like below.
 
 <h2>CodeFlow of App</h2> 
 
+There are two branches of app:-
+a) Master branch contain this code
+
 1. Used MVP architecture here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/MemesContract.kt
 
 2. Used coroutines for api calls here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/presenter/MemesPresenter.kt#L68
@@ -57,3 +60,19 @@ You can add data to this api using post request using postman like below.
 4. Used StateFlows for different managing states:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/StateFlows.kt
  
 5. Added tests for coroutines:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/test/java/com/example/memessharing
+
+b) <a href="https://github.com/vikasmain/MemesSharing/tree/feature/view-impl"><b>feature/view-impl</b></a> branch contains this code
+
+1. Removed activity reference from dagger hilt module:- https://github.com/vikasmain/MemesSharing/blob/feature/view-impl/app/src/main/java/com/example/memessharing/deps/MainModule.kt
+
+2. Created a separate view implementation for view interface:- https://github.com/vikasmain/MemesSharing/blob/feature/view-impl/app/src/main/java/com/example/memessharing/view/MemeViewImpl.kt
+
+3. Used MVP architecture here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/MemesContract.kt
+
+4. Used coroutines for api calls here:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/presenter/MemesPresenter.kt#L68
+ 
+5. Used Dagger hilt for dependency injection here:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/main/java/com/example/memessharing/deps
+ 
+6. Used StateFlows for different managing states:- https://github.com/vikasmain/MemesSharing/blob/master/app/src/main/java/com/example/memessharing/StateFlows.kt
+ 
+7. Added tests for coroutines:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/test/java/com/example/memessharing
