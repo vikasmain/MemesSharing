@@ -129,7 +129,11 @@ class VideoViewPagerHolder(
     ) {
         shareButton.setOnClickListener {
             mediaPlayer?.pause()
+<<<<<<< HEAD
             StateFlows.progressStateFlow.value = true
+=======
+            StateFlows.progressBarStateFlow.value = true
+>>>>>>> Create View implementation and removed activity reference from module
             downloadVideoHelper.handleVideoDownload(context, memesData.videoUrl, memesData.title)
         }
     }
@@ -142,12 +146,18 @@ class VideoViewPagerHolder(
                     R.drawable.pause_button
                 )
             )
+<<<<<<< HEAD
             postDelayed(
                 {
                     visibility = View.GONE
                 },
+=======
+            binding.playPauseButton.postDelayed(
+                { binding.playPauseButton.visibility = View.GONE },
+>>>>>>> Create View implementation and removed activity reference from module
                 2000
             )
+            binding.playPauseButton.visibility = View.VISIBLE
             mediaPlayer?.start()
         }
     }

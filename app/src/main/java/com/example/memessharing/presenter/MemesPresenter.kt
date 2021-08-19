@@ -30,7 +30,11 @@ class MemesPresenter @Inject constructor(
     internal fun attach() {
         observeVideoShareState()
         observeListViewItemClickState()
+<<<<<<< HEAD
         observeProgressBarStateFlow()
+=======
+        observeProgressBarState()
+>>>>>>> Create View implementation and removed activity reference from module
     }
 
     override fun callMemeListApi() {
@@ -107,8 +111,13 @@ class MemesPresenter @Inject constructor(
         }.launchIn(scope)
     }
 
+<<<<<<< HEAD
     private fun observeProgressBarStateFlow() {
         StateFlows.progressStateFlow.asStateFlow().onEach {
+=======
+    private fun observeProgressBarState() {
+        StateFlows.progressBarStateFlow.asStateFlow().onEach {
+>>>>>>> Create View implementation and removed activity reference from module
             if (it) {
                 view.showProgressBar()
             }

@@ -1,11 +1,10 @@
 package com.example.memessharing.deps
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import com.example.memessharing.MemesContract
 import com.example.memessharing.databinding.ActivityMainBinding
-import com.example.memessharing.view.MainActivity
+import com.example.memessharing.view.MemeViewImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -34,16 +33,9 @@ abstract class MainModule {
         fun providesCoroutineScope(): CoroutineScope {
             return MainScope() + CoroutineName("MemesCoroutine")
         }
-
-        @Provides
-        @ActivityScoped
-        @ActivityContext
-        fun provideMainActivity(activity: Activity): MainActivity {
-            return activity as MainActivity
-        }
     }
 
     @Binds
     @ActivityScoped
-    abstract fun providesView(@ActivityContext mainActivity: MainActivity): MemesContract.MemeView
+    abstract fun providesView(viewImpl: MemeViewImpl): MemesContract.MemeView
 }

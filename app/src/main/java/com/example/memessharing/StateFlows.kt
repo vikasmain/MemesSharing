@@ -11,6 +11,10 @@ object StateFlows {
         MutableStateFlow<Pair<MemeListResponse.MemesData?, List<MemeListResponse.MemesData>>?>(
             null
         )
+<<<<<<< HEAD
 
     internal val progressStateFlow = MutableStateFlow(false)
+=======
+    internal val progressBarStateFlow = MutableStateFlow(false)
+>>>>>>> Create View implementation and removed activity reference from module
 }
