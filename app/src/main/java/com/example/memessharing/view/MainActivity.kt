@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.os.Build
 import android.view.Window
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.memessharing.StateFlows
 import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.helper.DownloadVideoHelper
 
@@ -167,6 +168,8 @@ class MainActivity : AppCompatActivity(), MemesContract.MemeView {
 
     override fun onStop() {
         binding.homeView.viewPager.adapter = null
+        StateFlows.progressStateFlow.value = false
+        StateFlows.clickListenerStateFlow.value = null
         super.onStop()
     }
 

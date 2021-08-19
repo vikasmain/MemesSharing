@@ -10,19 +10,15 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import com.example.memessharing.MemesContract.MemeView
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @ActivityScoped
-class DownloadVideoHelper @Inject constructor(
-    private val memeView: MemeView
-) {
+class DownloadVideoHelper @Inject constructor() {
     internal val videoDownloadStateFlow = MutableStateFlow<Pair<Context, String?>?>(null)
 
     internal fun handleVideoDownload(context: Context, videoUrl: String, videoTitle: String) {
-        memeView.showProgressBar()
         context.registerReceiver(
             videoDownloadReceiver(), IntentFilter(
                 DownloadManager.ACTION_DOWNLOAD_COMPLETE

@@ -30,6 +30,7 @@ class MemesPresenter @Inject constructor(
     internal fun attach() {
         observeVideoShareState()
         observeListViewItemClickState()
+        observeProgressBarStateFlow()
     }
 
     override fun callMemeListApi() {
@@ -102,6 +103,17 @@ class MemesPresenter @Inject constructor(
             }
         }.catch {
             Log.e("MainActivity", "error observing Share state flow", it)
+            throw it
+        }.launchIn(scope)
+    }
+
+    private fun observeProgressBarStateFlow() {
+        StateFlows.progressStateFlow.asStateFlow().onEach {
+            if (it) {
+                view.showProgressBar()
+            }
+        }.catch {
+            Log.e("MainActivity", "error observing progress bar state flow", it)
             throw it
         }.launchIn(scope)
     }

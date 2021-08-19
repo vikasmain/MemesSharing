@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.memessharing.R
 import com.example.memessharing.api.MemeVideosListResponse
 import androidx.appcompat.content.res.AppCompatResources
+import com.example.memessharing.StateFlows
 import com.example.memessharing.api.MemeListResponse
 import com.example.memessharing.databinding.HomeViewPagerItemBinding
 import com.example.memessharing.helper.DownloadVideoHelper
@@ -128,11 +129,12 @@ class VideoViewPagerHolder(
     ) {
         shareButton.setOnClickListener {
             mediaPlayer?.pause()
+            StateFlows.progressStateFlow.value = true
             downloadVideoHelper.handleVideoDownload(context, memesData.videoUrl, memesData.title)
         }
     }
 
-    internal fun playMediaPlayer() {
+    private fun playMediaPlayer() {
         with(binding.playPauseButton) {
             setImageDrawable(
                 AppCompatResources.getDrawable(
@@ -140,7 +142,7 @@ class VideoViewPagerHolder(
                     R.drawable.pause_button
                 )
             )
-            itemView.postDelayed(
+            postDelayed(
                 {
                     visibility = View.GONE
                 },
@@ -150,7 +152,7 @@ class VideoViewPagerHolder(
         }
     }
 
-    internal fun pauseMediaPlayer() {
+    private fun pauseMediaPlayer() {
         with(binding.playPauseButton) {
             setImageDrawable(
                 AppCompatResources.getDrawable(
