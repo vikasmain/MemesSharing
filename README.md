@@ -62,7 +62,7 @@ You can add data to this api using post request using postman like below.
  
 5. Added tests for coroutines:- https://github.com/vikasmain/MemesSharing/tree/master/app/src/test/java/com/example/memessharing
 
-b) <b><a href="https://github.com/vikasmain/MemesSharing/tree/feature/view-impl"><b>feature/view-impl</b></a> branch contains this code</b>
+b) <b><a href="https://github.com/vikasmain/MemesSharing/tree/feature/view-impl"><b>feature/view-impl</b></a> branch contain this code</b>
 
 1. Removed activity reference from dagger hilt module:- https://github.com/vikasmain/MemesSharing/blob/feature/view-impl/app/src/main/java/com/example/memessharing/deps/MainModule.kt
 
