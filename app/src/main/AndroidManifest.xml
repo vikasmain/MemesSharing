@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.memessharing">
+    package="com.memes.memessharing">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MainApp"
+        android:name="com.memes.memessharing.MainApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,7 +28,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".view.MainActivity">
+        <activity android:name="com.memes.memessharing.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
