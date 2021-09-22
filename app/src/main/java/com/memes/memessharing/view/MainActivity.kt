@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         StateFlows.clickListenerStateFlow.value = null
         StateFlows.progressBarStateFlow.value = false
         binding.homeView.viewPager.adapter = null
-        StateFlows.progressStateFlow.value = false
         StateFlows.clickListenerStateFlow.value = null
         super.onStop()
     }
